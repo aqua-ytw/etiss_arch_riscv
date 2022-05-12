@@ -4,10 +4,12 @@ import "rv_base/RVM.core_desc"
 import "rv_base/RVC.core_desc"
 import "rv_base/RVD.core_desc"
 import "rv_base/RVF.core_desc"
+import "rv_base/RVP.core_desc"
+import "rv_base/RVV.core_desc"
 import "tum_mod.core_desc"
 
 
-Core RV32IMACFD provides RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, Zifencei, tum_csr, tum_ret, tum_rva {
+Core RV32IMACFDPV provides RV32I, RV32IC, RV32M, RV32F, RV32P, RV32V, RV32FC, RV32D, RV32DC, Zifencei, tum_csr, tum_ret, tum_rva {
     architectural_state {
         CSR[0x000] = 0x0000000B; // ustatus
         CSR[0x100] = 0x0000000B; // sstatus
@@ -20,6 +22,8 @@ Core RV32IMACFD provides RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, Zif
         CSR[0x304] = 0xFFFFFBBB; // mie
         CSR[0x104] = CSR[0x304] & (~(0x888)); // sie
         CSR[0x004] = CSR[0x304] & (~(0xAAA)); // uie
+
+        CSR[0xC22] = VLEN / 8; // vlenb
     }
 }
 
