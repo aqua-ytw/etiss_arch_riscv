@@ -2,7 +2,7 @@ import "rv_base/RISCVBase.core_desc"
 import "rv_base/RV32I.core_desc"
 import "rv_base/RVA.core_desc"
 
-InstructionSet tum_ret extends RISCVBase {
+InstructionSet tum_ret extends riscv_encoding, RISCVBase {
     architectural_state {
         signed<32> ETISS_RETURNCODE_NOERROR = 0;
         signed<32> ETISS_RETURNCODE_GENERALERROR = -1;
@@ -102,12 +102,6 @@ InstructionSet tum_csr extends Zicsr {
         unsigned int FFLAGS_N = 0x001;
         unsigned int FRM_N = 0x002;
         unsigned int FCSR_N = 0x003;
-        unsigned int CYCLE = 0xC00;
-        unsigned int CYCLEH = 0xC80;
-        unsigned int TIME = 0xC01;
-        unsigned int TIMEH = 0xC81;
-        unsigned int INSTRET = 0xC02;
-        unsigned int INSTRETH = 0xC82;
     }
 
     functions {
@@ -117,12 +111,12 @@ InstructionSet tum_csr extends Zicsr {
         unsigned<XLEN> csr_read(unsigned int csr) {
             if (csr == FFLAGS_N) return CSR[FCSR_N] & 0x1F;
             if (csr == FRM_N) return (CSR[FCSR_N] >> 5) & 0x07;
-            if (csr == CYCLE) return etiss_get_cycles();
-            if (csr == CYCLEH) return etiss_get_cycles() >> 32;
-            if (csr == TIME) return etiss_get_time();
-            if (csr == TIMEH) return etiss_get_time() >> 32;
-            if (csr == INSTRET) return etiss_get_instret();
-            if (csr == INSTRETH) return etiss_get_instret() >> 32;
+            if (csr == CSR_CYCLE) return etiss_get_cycles();
+            if (csr == (CSR_CYCLE+128)) return etiss_get_cycles() >> 32;
+            if (csr == CSR_TIME) return etiss_get_time();
+            if (csr == (CSR_TIME+128)) return etiss_get_time() >> 32;
+            if (csr == CSR_INSTRET) return etiss_get_instret();
+            if (csr == (CSR_INSTRET+128)) return etiss_get_instret() >> 32;
 
             return CSR[csr];
         }
