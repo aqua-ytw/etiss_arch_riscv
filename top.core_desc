@@ -7,24 +7,25 @@ import "rv_base/RVF.core_desc"
 import "rv_base/RVP.core_desc"
 import "rv_base/RVV.core_desc"
 import "tum_mod.core_desc"
+import "encoding.core_desc"
 
 
-Core RV32IMACFDPV provides RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, RV32P, RV32V, Zifencei, tum_csr, tum_ret, tum_rva {
+Core RV32IMACFDPV provides riscv_encoding, RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, RV32P, RV32V, Zifencei, tum_csr, tum_ret, tum_rva {
     architectural_state {
-        CSR[0x000] = 0x0000000B; // ustatus
-        CSR[0x100] = 0x0000000B; // sstatus
+        CSR[CSR_USTATUS] = 0x0000000B;
+        CSR[CSR_SSTATUS] = 0x0000000B;
         // TODO: Mirror mstatus to sstatus?
-        CSR[0x300] = 0x0000000B; // mstatus
-        CSR[0x300] |= MSTATUS_FS; // enable fpu
-        CSR[0x300] |= MSTATUS_VS; // enable vpu
+        CSR[CSR_MSTATUS] = 0x0000000B;
+        CSR[CSR_MSTATUS] |= MSTATUS_FS; // enable fpu
+        CSR[CSR_MSTATUS] |= MSTATUS_VS; // enable vpu
 
-        CSR[0x301] = 0x4014112D; // misa
+        CSR[CSR_MISA] = 0x4014112D;
 
-        CSR[0xC10] = 0x00000003;
+        CSR[0xC10] = 0x00000003; // ?
 
-        CSR[0x304] = 0xFFFFFBBB; // mie
-        CSR[0x104] = CSR[0x304] & (~(0x888)); // sie
-        CSR[0x004] = CSR[0x304] & (~(0xAAA)); // uie
+        CSR[CSR_MIE] = 0xFFFFFBBB;
+        CSR[CSR_SIE] = CSR[CSR_MIE] & (~(0x888));
+        CSR[CSR_UIE] = CSR[CSR_MIE] & (~(0xAAA));
 
         CSR[VTYPE_ADDR] = 0x1 << (XLEN-1); // vtype.vill=1, otherwise zero
         CSR[VL_ADDR] = 0x0; // vl
@@ -35,16 +36,16 @@ Core RV32IMACFDPV provides RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, R
 
 Core RV64IM provides RV64I, RV32M, tum_csr, tum_ret {
     architectural_state {
-        CSR[0x000] = 0x0000000B; // ustatus
-        CSR[0x100] = 0x0000000B; // sstatus
-        CSR[0x300] = 0x0000000B; // mstatus
+        CSR[CSR_USTATUS] = 0x0000000B;
+        CSR[CSR_SSTATUS] = 0x0000000B;
+        CSR[CSR_MSTATUS] = 0x0000000B;
 
-        CSR[0x301] = 0x4014112D; // misa
+        CSR[CSR_MISA] = 0x4014112D;
 
-        CSR[0xC10] = 0x00000003;
+        CSR[0xC10] = 0x00000003; // ?
 
-        CSR[0x304] = 0xFFFFFBBB; // mie
-        CSR[0x104] = CSR[0x304] & (~(0x888)); // sie
-        CSR[0x004] = CSR[0x304] & (~(0xAAA)); // uie
+        CSR[CSR_MIE] = 0xFFFFFBBB;
+        CSR[CSR_SIE] = CSR[CSR_MIE] & (~(0x888));
+        CSR[CSR_UIE] = CSR[CSR_MIE] & (~(0xAAA));
     }
 }
