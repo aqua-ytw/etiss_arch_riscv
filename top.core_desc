@@ -5,7 +5,6 @@ import "rv_base/RVC.core_desc"
 import "rv_base/RVD.core_desc"
 import "rv_base/RVF.core_desc"
 import "rv_base/RVP.core_desc"
-import "rv_base/RVV.core_desc"
 import "tum_mod.core_desc"
 import "encoding.core_desc"
 
