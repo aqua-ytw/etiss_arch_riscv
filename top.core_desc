@@ -4,13 +4,12 @@ import "rv_base/RVM.core_desc"
 import "rv_base/RVC.core_desc"
 import "rv_base/RVD.core_desc"
 import "rv_base/RVF.core_desc"
-import "rv_base/RVP.core_desc"
 import "rv_base/RVV.core_desc"
 import "tum_mod.core_desc"
 import "encoding.core_desc"
 
 
-Core RV32IMACFDPV provides riscv_encoding, RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, RV32P, RV32V, Zifencei, tum_csr, tum_ret, tum_rva {
+Core RV32IMACFDV provides riscv_encoding, RV32I, RV32IC, RV32M, RV32F, RV32FC, RV32D, RV32DC, RV32V, Zifencei, tum_csr, tum_ret, tum_rva {
     architectural_state {
         CSR[CSR_USTATUS] = 0x0000000B;
         CSR[CSR_SSTATUS] = 0x0000000B;
@@ -49,3 +48,4 @@ Core RV64IM provides RV64I, RV32M, tum_csr, tum_ret {
         CSR[CSR_UIE] = CSR[CSR_MIE] & (~(0xAAA));
     }
 }
+// TODO: RV64IMACFDV
