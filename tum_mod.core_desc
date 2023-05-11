@@ -2,7 +2,7 @@ import "rv_base/RISCVBase.core_desc"
 import "rv_base/RV32I.core_desc"
 import "rv_base/RVA.core_desc"
 
-InstructionSet tum_ret extends riscv_encoding, RISCVBase {
+InstructionSet tum_ret extends RISCVBase {
     architectural_state {
         signed<32> ETISS_RETURNCODE_NOERROR = 0;
         signed<32> ETISS_RETURNCODE_GENERALERROR = -1;
@@ -98,33 +98,28 @@ InstructionSet tum_ret extends riscv_encoding, RISCVBase {
 }
 
 InstructionSet tum_csr extends Zicsr {
-    architectural_state {
-        unsigned int FFLAGS_N = 0x001;
-        unsigned int FRM_N = 0x002;
-        unsigned int FCSR_N = 0x003;
-    }
 
     functions {
         extern unsigned<64> etiss_get_cycles() [[ etiss_needs_arch ]];
         extern unsigned<64> etiss_get_time();
         extern unsigned<64> etiss_get_instret() [[ etiss_needs_arch ]];
         unsigned<XLEN> csr_read(unsigned int csr) {
-            if (csr == FFLAGS_N) return CSR[FCSR_N] & 0x1F;
-            if (csr == FRM_N) return (CSR[FCSR_N] >> 5) & 0x07;
-            if (csr == CSR_CYCLE) return etiss_get_cycles();
-            if (csr == (CSR_CYCLE+128)) return etiss_get_cycles() >> 32;
-            if (csr == CSR_TIME) return etiss_get_time();
-            if (csr == (CSR_TIME+128)) return etiss_get_time() >> 32;
-            if (csr == CSR_INSTRET) return etiss_get_instret();
-            if (csr == (CSR_INSTRET+128)) return etiss_get_instret() >> 32;
+            if (csr == RV_CSR_FFLAGS) return CSR[RV_CSR_FCSR] & 0x1F;
+            if (csr == RV_CSR_FRM) return (CSR[RV_CSR_FCSR] >> 5) & 0x07;
+            if (csr == RV_CSR_CYCLE) return etiss_get_cycles();
+            if (csr == (RV_CSR_CYCLE+128)) return etiss_get_cycles() >> 32;
+            if (csr == RV_CSR_TIME) return etiss_get_time();
+            if (csr == (RV_CSR_TIME+128)) return etiss_get_time() >> 32;
+            if (csr == RV_CSR_INSTRET) return etiss_get_instret();
+            if (csr == (RV_CSR_INSTRET+128)) return etiss_get_instret() >> 32;
 
             return CSR[csr];
         }
 
         void csr_write(unsigned int csr, unsigned<XLEN> val) {
-            if (csr == FFLAGS_N) CSR[FCSR_N] = (CSR[FCSR_N] & (0x07 << 5)) | (val & 0x1F);
-            else if (csr == FRM_N) CSR[FCSR_N] = ((val & 0x07) << 5) | (CSR[FCSR_N] & 0x1F);
-            else if (csr == FCSR_N) CSR[FCSR_N] = val & 0xFF;
+            if (csr == RV_CSR_FFLAGS) CSR[RV_CSR_FCSR] = (CSR[RV_CSR_FCSR] & (0x07 << 5)) | (val & 0x1F);
+            else if (csr == RV_CSR_FRM) CSR[RV_CSR_FCSR] = ((val & 0x07) << 5) | (CSR[RV_CSR_FCSR] & 0x1F);
+            else if (csr == RV_CSR_FCSR) CSR[RV_CSR_FCSR] = val & 0xFF;
             else CSR[csr] = val;
         }
     }
